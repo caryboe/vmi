@@ -1,3 +1,4 @@
+// gauge.js 
 /**
  * Create an SVG gauge (semi-circle) as a string.
  * @param {Object} cfg
