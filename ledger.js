@@ -1,3 +1,4 @@
+// ledger.js
 // Dummy data for now – later this will come from your API / DB.
 const sampleTransactions = [
   {
