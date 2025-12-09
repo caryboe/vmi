@@ -116,16 +116,16 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Handle active items
       switch(action) {
-        case 'edit-notes':
-          console.log('Opening Edit Notes form...');
-          // We'll implement this next
-          break;
+		case 'edit-notes':
+			console.log('Opening Edit Notes form...');
+			openEditNotesForm();  // ← THIS LINE MUST BE CHANGED!
+			break;
           
         case 'see-transactions':
-          console.log('Redirecting to transactions page...');
-          window.location.href = '/ledger.html';
-          break;
-          
+			  console.log('Redirecting to transactions page...');
+			  window.location.href = '/ledger.html';
+			  break;
+
         default:
           console.log(`Action: ${action}`);
       }
@@ -154,22 +154,142 @@ function formatNumber(value) {
 function openEditNotesForm() {
   const modal = document.getElementById('holding-detail-modal');
   const holdingId = modal.dataset.holdingId;
-  const currentNotes = document.querySelector('.notes-content').textContent;
   
-  // Create/edit form
-  const formHTML = `
-    <div class="edit-notes-modal">
-      <h3>Edit Notes</h3>
-      <textarea id="notes-edit-textarea">${currentNotes}</textarea>
-      <div class="edit-notes-buttons">
-        <button class="btn-cancel">Cancel</button>
-        <button class="btn-save" data-holding-id="${holdingId}">Save</button>
-      </div>
+  // Get current notes from the display
+  const currentNotes = document.getElementById('modal-notes').textContent;
+  
+  // Create modal overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'edit-notes-overlay';
+  overlay.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+  `;
+  
+  // Create modal content
+  const editModal = document.createElement('div');
+  editModal.className = 'edit-notes-modal';
+  editModal.style.cssText = `
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  `;
+  
+  editModal.innerHTML = `
+    <h3 style="margin-top: 0; margin-bottom: 16px;">Edit Notes</h3>
+    <textarea 
+      id="notes-edit-textarea" 
+      style="
+        width: 100%;
+        height: 150px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 14px;
+        resize: vertical;
+        box-sizing: border-box;
+      "
+      placeholder="Add notes about this holding..."
+    >${currentNotes === 'No notes' ? '' : currentNotes}</textarea>
+    
+    <div style="
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+    ">
+      <button id="cancel-edit-notes" style="
+        padding: 8px 16px;
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+      ">Cancel</button>
+      
+      <button id="save-edit-notes" style="
+        padding: 8px 16px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      ">Save Notes</button>
     </div>
   `;
   
-  // Show form overlay
-  // Implement save to database
+  overlay.appendChild(editModal);
+  document.body.appendChild(overlay);
+  
+  // Focus the textarea
+  setTimeout(() => {
+    document.getElementById('notes-edit-textarea').focus();
+  }, 100);
+  
+  // Event listeners
+  document.getElementById('cancel-edit-notes').addEventListener('click', () => {
+    document.body.removeChild(overlay);
+  });
+  
+  document.getElementById('save-edit-notes').addEventListener('click', async () => {
+    const newNotes = document.getElementById('notes-edit-textarea').value.trim();
+    
+    try {
+      const response = await fetch(`/api/holdings/${holdingId}/notes`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ notes: newNotes })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Update the display
+        document.getElementById('modal-notes').textContent = 
+          newNotes || 'No notes';
+        
+        // Close the edit modal
+        document.body.removeChild(overlay);
+        
+        // Optional: Show success message
+        alert('Notes updated successfully!');
+      } else {
+        alert('Failed to update notes: ' + result.message);
+      }
+    } catch (error) {
+      console.error('Error saving notes:', error);
+      alert('Error saving notes. Please try again.');
+    }
+  });
+  
+  // Close on overlay click
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      document.body.removeChild(overlay);
+    }
+  });
+  
+  // Close on Escape key
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      document.body.removeChild(overlay);
+      document.removeEventListener('keydown', handleEscape);
+    }
+  };
+  document.addEventListener('keydown', handleEscape);
 }
 
 // ========== MAIN MODAL FUNCTIONS ==========
@@ -192,8 +312,9 @@ function openHoldingDetail(holding) {
   gainEl.textContent = gainText;
   gainEl.className = `detail-value ${holding.gain >= 0 ? 'gain-positive' : 'gain-negative'}`;
   
-  // Notes
-  document.getElementById('modal-notes').textContent = holding.notes || 'No notes';
+  // Notes - handle empty string correctly
+const notesText = (holding.notes !== null && holding.notes !== undefined) ? holding.notes : 'No notes';
+document.getElementById('modal-notes').textContent = notesText;
   
   // Store holding ID for editing
   document.getElementById('holding-detail-modal').dataset.holdingId = holding.id;
@@ -244,7 +365,7 @@ async function fetchHoldingDetails(ticker) {
         currentPrice: currentPrice,
         gain: gain,
         gainPct: gainPct,
-        notes: data.holding.notes || 'No notes',
+        notes: (data.holding.notes !== null && data.holding.notes !== undefined) ? data.holding.notes : 'No notes',
         id: data.holding.id
       };
       
