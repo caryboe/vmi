@@ -1,0 +1,590 @@
+.app-header-left {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* Basic page layout */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0b1020;
+  color: #f5f5fa;
+}
+
+.ledger-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Match Dashboard responsive behavior */
+.app-logo {
+  width: clamp(160px, 40vw, 320px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.35));
+}
+
+.ledger-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.ledger-subtitle {
+  margin: 4px 0 16px;
+  color: #a6acc7;
+  font-size: 0.95rem;
+}
+
+/* Top nav for Dashboard / Transactions */
+.app-nav {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-link {
+  font-size: 0.9rem;
+  color: #c0c6e6;
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.nav-link:hover {
+  background: #141b33;
+}
+
+.nav-link-active {
+  background: #4b8dff;
+  color: #ffffff;
+}
+
+/* Ensure proper left alignment like Dashboard */
+.app-header {
+  margin-bottom: 24px;
+}
+
+/* Top bar */
+.ledger-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.ledger-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+select,
+input,
+textarea {
+  background: #141b33;
+  border: 1px solid #242b4a;
+  color: #f5f5fa;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+  outline: 1px solid #4b8dff;
+}
+
+/* Buttons */
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: #4b8dff;
+  color: #fff;
+}
+
+.btn.secondary {
+  background: #242b4a;
+  color: #f5f5fa;
+}
+
+.btn.primary:hover {
+  filter: brightness(1.1);
+}
+
+.icon-btn {
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Desktop table */
+.ledger-table-wrapper {
+  margin-top: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #242b4a;
+  background: #0f1427;
+}
+
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.ledger-table thead {
+  background: #151c36;
+}
+
+.ledger-table th,
+.ledger-table td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid #1d2441;
+}
+
+.ledger-table th {
+  font-weight: 600;
+  color: #c0c6e6;
+}
+
+.ledger-table tbody tr:hover {
+  background: #181f3b;
+}
+
+.ledger-table td.notes-cell {
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mobile cards */
+.ledger-cards {
+  display: none; /* default hidden on desktop; shown on mobile via media query */
+  margin-top: 8px;
+}
+
+.ledger-card {
+  background: #0f1427;
+  border-radius: 10px;
+  border: 1px solid #242b4a;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.ledger-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.ledger-card-title {
+  font-weight: 600;
+}
+
+.ledger-card-subtitle {
+  font-size: 0.8rem;
+  color: #a6acc7;
+}
+
+.ledger-card-pill {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+}
+
+.ledger-card-pill.BUY {
+  background: #214a2b;
+  color: #9ff0a0;
+}
+
+.ledger-card-pill.SELL {
+  background: #4a2223;
+  color: #f5a3a3;
+}
+
+.ledger-card-gain {
+  font-size: 0.85rem;
+}
+
+.ledger-card-body {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  display: none;
+}
+
+.ledger-card.expanded .ledger-card-body {
+  display: block;
+}
+
+.ledger-card-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+/* Floating add button (mobile) */
+.floating-add-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: #4b8dff;
+  color: #fff;
+  font-size: 1.6rem;
+  display: none; /* hidden on desktop, shown on mobile */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+/* Modal */
+.modal.hidden {
+  display: none;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  max-width: 480px;
+  max-height: 100vh;
+  background: #0f1427;
+  border-radius: 16px;
+  border: 1px solid #242b4a;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid #1d2441;
+}
+
+.modal-body {
+  padding: 10px 14px 12px;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+/* Form rows */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.form-row-inline {
+  flex-direction: row;
+  gap: 8px;
+}
+
+.form-row-inline > div {
+  flex: 1;
+}
+
+.form-row label {
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  color: #c0c6e6;
+}
+
+.total-preview {
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #141b33;
+  border: 1px dashed #242b4a;
+  font-size: 0.9rem;
+}
+
+/* Responsive behavior - MOBILE TABLE WITH HORIZONTAL SCROLLING */
+@media (max-width: 767px) {
+  /* Show the table with horizontal scrolling */
+  .ledger-table-wrapper {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    border: 1px solid #242b4a;
+    background: #0f1427;
+    margin-top: 8px;
+  }
+  
+  /* Make table wide enough for all columns */
+  .ledger-table {
+    min-width: 900px;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  
+  /* Style the scrollbar */
+  .ledger-table-wrapper::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .ledger-table-wrapper::-webkit-scrollbar-track {
+    background: #141b33;
+    border-radius: 4px;
+  }
+  
+  .ledger-table-wrapper::-webkit-scrollbar-thumb {
+    background: #4b8dff;
+    border-radius: 4px;
+  }
+  
+  /* Make table cells compact */
+  .ledger-table th,
+  .ledger-table td {
+    padding: 6px 8px;
+    min-width: 70px;
+    white-space: nowrap;
+  }
+  
+  /* Highlight important columns */
+  .ledger-table th:nth-child(2),
+  .ledger-table td:nth-child(2),
+  .ledger-table th:nth-child(4),
+  .ledger-table td:nth-child(4),
+  .ledger-table th:nth-child(5),
+  .ledger-table td:nth-child(5),
+  .ledger-table th:nth-child(6),
+  .ledger-table td:nth-child(6) {
+    font-weight: 600;
+    background: rgba(75, 141, 255, 0.05);
+  }
+  
+  /* Style for Type column */
+  .ledger-table td:nth-child(3) {
+    font-weight: 500;
+  }
+  
+  /* Notes column - allow wrapping */
+  .ledger-table td:nth-child(9) {
+    white-space: normal;
+    max-width: 150px;
+    min-width: 120px;
+  }
+  
+  /* Hide cards since we're using the table */
+  .ledger-cards {
+    display: none;
+  }
+  
+  /* Adjust top bar for mobile */
+  .ledger-top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .ledger-filters {
+    justify-content: center;
+  }
+  
+  /* Make filters more touch-friendly */
+  select {
+    min-height: 36px;
+    font-size: 0.9rem;
+  }
+}
+
+  /* ✅ Keep top + Add Transaction button visible on mobile */
+  #addTransactionBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ✅ Show floating add button on mobile */
+  #floatingAddBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    max-width: 100%;
+    border-radius: 0;
+  }
+} /* This closing brace ends the media query */
+
+/* === Header + Nav override to keep things consistent === */
+
+.app-header {
+  display: flex;
+  flex-direction: column;    /* Mobile: stacked */
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.app-header-left {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* Logo sizing */
+.app-logo {
+  width: clamp(160px, 40vw, 260px);
+  height: auto;
+  display: block;
+  filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.35));
+}
+
+/* Hide full title on small screens */
+.app-title.desktop-title {
+  display: none;
+}
+
+.app-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin: 8px 0 0;
+  text-align: left;
+}
+
+/* Nav */
+.app-nav {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  font-size: 0.9rem;
+  color: #c0c6e6;
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.nav-link:hover {
+  background: #141b33;
+}
+
+.nav-link-active {
+  background: #4b8dff;
+  color: #ffffff;
+}
+
+/* Desktop / tablet layout */
+@media (min-width: 768px) {
+  .app-header {
+    flex-direction: row;     /* logo+title left, nav right */
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .app-title.desktop-title {
+    display: block;
+  }
+
+  .app-title {
+    margin-top: 0;
+    font-size: 32px;
+  }
+}
+
+/* Prevent horizontal overflow on mobile */
+@media (max-width: 767px) {
+  .ledger-page {
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 12px; /* Optional: slightly smaller padding on mobile */
+  }
+  
+  .ledger-card {
+    max-width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word; /* Prevent long text from overflowing */
+  }
+}
+
+/* Mobile scroll hint */
+.mobile-scroll-hint {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .mobile-scroll-hint {
+    display: block;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #a6acc7;
+    margin-top: 4px;
+    padding: 4px;
+    background: rgba(75, 141, 255, 0.1);
+    border-radius: 4px;
+  }
+}
+
+/* Better spacing between button and filters */
+.transaction-entry {
+  margin-bottom: 24px;
+}
+
+.ledger-top-bar {
+  margin-top: 8px; /* Small additional space */
+}
+
+/* Mobile-specific spacing */
+@media (max-width: 767px) {
+  .transaction-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Space between title and button */
+    margin-bottom: 20px;
+  }
+  
+  .transaction-entry h1 {
+    margin: 0; /* Remove default margin */
+  }
+  
+  #addTransactionBtn {
+    align-self: flex-start; /* Align button to left */
+    margin-bottom: 4px; /* Small space before filters */
+  }
+  
+  .ledger-top-bar {
+    margin-top: 12px;
+  }
+}

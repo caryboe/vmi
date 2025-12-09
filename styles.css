@@ -1,0 +1,2485 @@
+/* Group logo + title together on left when nav moves right */
+.app-header-left {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* === Logo Header Layout === */
+.app-header {
+  display: flex;
+  flex-direction: column;  /* Mobile: stacked */
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+/* Mobile-first responsive logo */
+.app-logo {
+  width: clamp(160px, 40vw, 320px); /* Scales w/ screen */
+  height: auto;
+  display: block;
+  filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.35));
+}
+
+/* Full title text is hidden on mobile by default */
+.app-title.desktop-title {
+  display: none;
+}
+
+/* Title styling */
+.app-title {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  color: #e5e7eb;
+  margin: 16px 0 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0b1020;      /* same as ledger.css */
+  color: #f5f5fa;           /* same as ledger.css */
+}
+
+.app-nav {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-link {
+  font-size: 0.9rem;
+  color: #c0c6e6;
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.nav-link:hover {
+  background: #141b33;
+}
+
+.nav-link-active {
+  background: #4b8dff;
+  color: #ffffff;
+}
+
+.app-root {
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 0 24px 40px;
+}
+
+/* Adjust column widths */
+.holdings-table th:nth-child(2),
+.holdings-table td:nth-child(2) {
+  width: 110px; /* Ticker */
+}
+
+.holdings-table th:nth-child(4),
+.holdings-table td:nth-child(4) {
+  width: 135px; /* Price Paid per Share */
+}
+
+.holdings-table th:nth-child(5),
+.holdings-table th:nth-child(7),
+.holdings-table td:nth-child(5),
+.holdings-table td:nth-child(7) {
+  width: 140px; /* Total Paid + Current Total */
+}
+
+.holdings-table th:nth-child(6),
+.holdings-table td:nth-child(6) {
+  width: 105px; /* Current Value */
+}
+
+/* Right-align all currency + numeric cells */
+.holdings-table td.numeric,
+.holdings-table th.numeric {
+  text-align: right;
+}
+
+/* === Metric board layout (ADAPTED FOR MOBILE-FIRST GRID) === */
+.metric-tile {
+  background: #73787C;   /* lighter than before and visually distinct from body */
+  border-radius: 18px;
+  border: 2px solid #111827;
+  padding: 16px 16px 18px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  min-height: 250px;   /* ensure room for thresholds text */
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.metric-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.metric-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.metric-help {
+  border: none;
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.metric-help:hover {
+  background: rgba(30, 64, 175, 0.9);
+}
+
+/* Gauge container */
+.metric-gauge {
+  margin: 8px 0 6px;
+  display: flex;
+  justify-content: center;
+}
+
+/* SVG base size */
+.metric-gauge svg {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+}
+
+/* Value bubble */
+.metric-value-bubble {
+  align-self: center;
+  margin: 4px 0;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: #e5f2ff;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.65);
+}
+
+/* As-of text */
+.metric-asof {
+  text-align: center;
+  font-size: 12px;
+  color: #9ca3af;
+  font-weight:500;
+  margin-top: 4px;
+}
+
+/* Thresholds block */
+.metric-thresholds {
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 1.25;
+  font-weight:600;
+  color: #cbd5e1;
+  text-align: center;
+  white-space: pre-line; /* plays nicely with <br> */
+}
+
+.metric-thresholds-title {
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  opacity: 0.75;
+  display: block;
+  margin-bottom: 3px;
+}
+
+/* Shiller note */
+.metric-note {
+  margin-top: 10px;
+  padding-top: 6px;
+  border-top: 1px solid #111827;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #d1d5db;
+}
+
+.metric-note b {
+  font-weight: 600;
+}
+
+.metric-note a {
+  color: #3b82f6;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.metric-note a:hover {
+  text-decoration: underline;
+}
+
+/* Gauge specific elements */
+.gauge-arc-outline {
+  stroke: #000000;
+  stroke-width: 30;
+  fill: none;
+}
+
+.gauge-arc-fill {
+  stroke-width: 28;
+  fill: none;
+}
+
+.gauge-arc-neutral {
+  stroke: #50627a; /* neutral soft blue-gray */
+}
+
+.gauge-needle line {
+  stroke: #000000;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.gauge-needle-center {
+  fill: #ffffff;
+}
+
+/* === Holdings Section === */
+.holdings-section {
+  margin-top: 32px;
+  background: #73787c; /* same family as metric tiles */
+  border-radius: 18px;
+  border: 2px solid #111827;
+  padding: 18px 20px 22px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  clear: both;          /* ensure content starts full-width */
+}
+
+.holdings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+  width: 100%;          /* header spans full card width */
+}
+
+.holdings-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.holdings-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #e5e7eb;
+}
+
+.holdings-toggle {
+  text-align: right;
+  max-width: 320px;
+}
+
+.toggle-line {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: nowrap;      /* keep label + pill on one line */
+}
+
+.toggle-title {
+  font-size: 13px;
+  color: #e5e7eb;
+}
+
+/* ON/OFF pill button */
+.store-toggle {
+  min-width: 56px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.7);
+  transition: background-color 0.12s ease, color 0.12s ease,
+    transform 0.05s ease, box-shadow 0.05s ease;
+}
+
+/* OFF state: neutral gray */
+.store-toggle-off {
+  background: #4b5563;
+  color: #e5e7eb;
+}
+
+/* ON state: green */
+.store-toggle-on {
+  background: #10b981;
+  color: #061019;
+}
+
+.store-toggle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(15, 23, 42, 0.85);
+}
+
+.store-toggle:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.6);
+}
+
+.toggle-help {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: #d1d5db;
+}
+
+/* Make sure the table sits directly under the header, full-width, no horizontal scroll bar by default */
+.holdings-table-wrapper {
+  width: 100%;
+  margin-top: 10px;
+  overflow-x: visible;
+}
+
+/* Action buttons above the table */
+.holdings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* Reuse a simple button style consistent with the theme */
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.55);
+  transition: transform 0.05s ease, box-shadow 0.05s ease, opacity 0.1s ease;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #f9fafb;
+}
+
+.btn-danger {
+  background: #b91c1c;
+  color: #f9fafb;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.75);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.6);
+}
+
+/* Table layout */
+.holdings-table-wrapper {
+  overflow-x: auto;
+}
+
+.holdings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.holdings-table thead {
+  background: #4b5563;
+}
+
+.holdings-table th,
+.holdings-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #374151;
+}
+
+.holdings-table th {
+  text-align: left;
+  font-weight: 600;
+  color: #f9fafb;
+  white-space: nowrap;
+}
+
+.holdings-table td {
+  color: #e5e7eb;
+  vertical-align: middle;
+}
+
+.holdings-table tbody tr:nth-child(even) {
+  background: rgba(17, 24, 39, 0.2);
+}
+
+.holdings-table input,
+.holdings-table select {
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid #4b5563;
+  background: #111827;
+  color: #e5e7eb;
+  font-size: 12px;
+}
+
+.holdings-table input::placeholder {
+  color: #9ca3af;
+}
+
+.holdings-table select {
+  cursor: pointer;
+}
+
+/* Gain/Loss coloring - SINGLE DEFINITION */
+.gain-positive {
+  color: #10b981; /* green */
+}
+
+.gain-negative {
+  color: #ef4444; /* red */
+}
+
+.gain-neutral {
+  color: #e5e7eb; /* neutral light gray */
+}
+
+.holdings-table td.gain-positive {
+  color: #22c55e; /* brighter green */
+  font-weight: 700;
+}
+
+.holdings-table td.gain-negative {
+  color: #f97373; /* brighter red */
+  font-weight: 700;
+}
+
+.holdings-table td.gain-neutral {
+  color: #e5e7eb;
+  font-weight: 600;
+}
+
+/* Right-align numeric cells */
+.holdings-table .numeric {
+  text-align: right;
+}
+
+/* Actions column */
+.holdings-actions-cell {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.row-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 4px;
+  min-width: 28px;
+}
+
+.row-btn-add {
+  background: #10b981; /* green plus */
+  color: #0b1120;
+}
+
+.row-btn-delete {
+  background: #dc2626; /* red minus */
+  color: #f9fafb;
+}
+
+/* Placeholder for summary area */
+.account-summary {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #e5e7eb;
+}
+
+/* === Holdings Summary Cards (per symbol totals) === */
+.holdings-summary-section {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  padding: 10px 12px 4px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+/* Option 2: Better styled question mark bubble */
+.holding-unknown-help {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-weight: 700; /* Bolder */
+  cursor: pointer;
+  opacity: 0.85;
+  line-height: 1;
+  padding: 0;
+  text-align: center;
+  vertical-align: middle;
+  /* Use a better looking question mark */
+  font-family: Arial, sans-serif;
+  transition: all 0.15s ease; /* Smooth hover animation */
+}
+
+.holding-unknown-help:hover {
+  opacity: 1;
+  background: rgba(59, 130, 246, 0.2); /* Blue tint on hover */
+  border-color: rgba(59, 130, 246, 0.5);
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Bottom popover for mobile/desktop */
+.holding-help-popover {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.holding-help-popover.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.holding-help-popover-content {
+  max-width: 420px;
+  width: 100%;
+  background: #020617; /* deep navy, matches your theme */
+  color: #e5e7eb;
+  border-radius: 14px;
+  padding: 12px 14px 10px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+  font-size: 0.85rem;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.holding-help-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.holding-help-text {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.holding-help-close {
+  float: right;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+}
+
+.holding-help-close:hover {
+  color: #f9fafb;
+}
+
+/* Main holdings section wrapper on the dashboard */
+.holdings-summary {
+  max-width: 900px;        /* match card width */
+  margin: 2rem auto 4rem;  /* centered under Market Conditions */
+  padding: 0 1rem;
+  text-align: center;      /* center the "Holdings Overview" title */
+}
+
+.holdings-summary-title {
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+/* grid for the symbol cards */
+.holdings-summary-grid {
+  margin: 0 auto 1.5rem;  /* center grid content */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  justify-content: center; /* keep single card centered */
+  max-width: 900px;        /* prevents super wide layout */
+}
+
+.holding-card {
+  background: #1e293b; /* Changed from #161b2b to lighter color for better contrast */
+  border-radius: 16px;
+  border: 1px solid #334155; /* Slightly lighter border for better visibility */
+  padding: 12px 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.holding-symbol {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.holding-total-shares {
+  font-size: 12px;
+  color: #cbd5e1;
+}
+
+.holding-gain {
+  text-align: right;
+}
+
+.holding-gain-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.holding-gain-percent {
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+/* Rows for total cost / current value */
+.holding-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 2px;
+}
+
+.holding-label {
+  color: #9ca3af;
+}
+
+.holding-value {
+  font-weight: 500;
+}
+
+/* Per-account breakdown inside card */
+.holding-accounts {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(148, 163, 184, 0.4);
+  font-size: 11px;
+}
+
+.holding-account-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.holding-account-name {
+  color: #e5e7eb;
+}
+
+.holding-account-meta {
+  color: #9ca3af;
+  text-align: right;
+}
+
+/* === Metric detail overlay (tap tile → full screen view) === */
+.metric-detail-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;              /* hidden until opened */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.metric-detail-overlay.is-open {
+  display: flex;
+}
+
+.metric-detail-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.metric-detail-panel {
+  position: relative;
+  z-index: 1;
+  background: #0b1020;
+  border-radius: 18px;
+  border: 1px solid #1f2937;
+  padding: 16px 16px 20px;
+  max-width: 420px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+/* Close button */
+.metric-detail-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Inside the overlay, make the tile look bigger/clearer */
+.metric-detail-content .metric-tile {
+  box-shadow: none;
+  background: #111827;
+}
+
+/* Bigger gauge in detail view */
+.metric-detail-content .metric-gauge svg {
+  max-width: 260px;
+}
+
+/* Always show thresholds & note inside detail */
+.metric-detail-content .metric-thresholds,
+.metric-detail-content .metric-note {
+  display: block !important;
+  font-size: 12px;
+  line-height: 1.3;
+  margin-top: 8px;
+}
+
+/* === Market Conditions header + collapse toggle === */
+.market-section {
+  margin-bottom: 16px;
+}
+
+.market-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.market-section-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.market-toggle {
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.market-toggle:hover {
+  background: rgba(148, 163, 184, 0.12);
+  color: #e5e7eb;
+}
+
+/* When collapsed, hide the gauges entirely */
+.metric-board--collapsed {
+  display: none;
+}
+
+/* === RESPONSIVE BREAKPOINTS === */
+
+/* Metric tile grid - mobile first */
+.metric-board {
+  display: grid;
+  grid-template-columns: 1fr;        /* 1 column on phones */
+  gap: 20px;
+  padding: 10px 0 24px;
+}
+
+/* Tablet: 2 columns */
+@media (min-width: 768px) {
+  .metric-board {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+    max-width: 900px;
+    margin: 0 auto 24px;
+  }
+}
+
+/* Desktop: 4 columns, centered, tidy width */
+@media (min-width: 1200px) {
+  .metric-board {
+    grid-template-columns: repeat(4, minmax(260px, 1fr));
+    max-width: 1100px;
+    margin: 0 auto 24px;
+  }
+}
+
+/* Extra-small layout for gauges on phones */
+@media (max-width: 640px) {
+  /* 2 tiles per row instead of 1 */
+  .metric-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .metric-tile {
+    padding: 8px 8px 10px;
+    border-radius: 12px;
+  }
+
+  .metric-gauge svg {
+    max-width: 120px;   /* noticeably smaller */
+  }
+
+  .metric-title {
+    font-size: 12px;
+  }
+
+  .metric-subtitle {
+    font-size: 10px;
+  }
+
+  .metric-value-bubble {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  /* Optional: hide the long threshold text on tiny screens */
+  .metric-thresholds {
+    display: none;
+  }
+}
+
+/* Desktop / tablet layout */
+@media (min-width: 768px) {
+  .app-header {
+    flex-direction: row;     /* logo+title left, nav right */
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .app-title.desktop-title {
+    display: block;
+  }
+
+  .app-title {
+    margin-top: 0;
+    font-size: 32px;
+  }
+}
+
+/* Desktop: 5 columns with guaranteed spacing */
+@media (min-width: 1024px) {
+  #metric-board {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 24px !important;
+    justify-content: center;
+    margin: 0 auto 24px !important;
+    padding: 10px 0 !important;
+  }
+  
+  /* Reset any tile margins that might be interfering */
+  .metric-tile {
+    margin: 0 !important;
+    padding: 14px 16px 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Shrink gauge tiles more on desktop */
+@media (min-width: 1024px) {
+  .metric-tile {
+    padding: 10px 10px 12px; /* Less padding */
+  }
+
+  .metric-tile .metric-gauge svg {
+    max-width: 150px; /* Down from ~220px originally */
+  }
+
+  .metric-value-bubble {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  .metric-thresholds {
+    font-size: 10px;
+  }
+}
+
+/* Large desktop: 6 columns */
+@media (min-width: 1400px) {
+  .metric-board {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 22px;
+  }
+}
+
+/* On small screens, stack title and button */
+@media (max-width: 600px) {
+  .transactions-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Two columns on wider screens */
+@media (min-width: 900px) {
+  .holdings-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* === Additional fixes === */
+/* Option A: Additional centering fix */
+.market-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#metric-board-container {
+  width: 100%;
+}
+
+/* Only apply flex when NOT collapsed */
+#metric-board-container:not(.metric-board--collapsed) {
+  display: flex;
+  justify-content: center;
+}
+
+/* Restrict the maximum width of metric tiles on larger screens for better layout */
+.metric-tile {
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Ensure the grid doesn't stretch things out too wide by applying a max width to the container */
+#metric-board {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* Fix holdings card layout */
+.holding-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.holding-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.holding-header-left {
+  flex: 1;
+}
+
+.holding-gain {
+  text-align: right;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-left: 16px;
+  flex-shrink: 0;
+}
+
+.holding-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.holding-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 4px 0;
+}
+
+/* Fix the market section header */
+.market-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.market-section-title {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.market-toggle {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+}
+
+/* Fix the app header for desktop */
+@media (min-width: 768px) {
+  .app-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 40px;
+    padding: 0 20px;
+  }
+  
+  .app-title.desktop-title {
+    display: block;
+    font-size: 2rem;
+    margin: 0 0 0 20px;
+  }
+  
+  .app-nav {
+    margin-bottom: 8px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-root {
+    padding: 0 32px 40px;
+  }
+  
+  .holdings-summary-grid {
+    grid-template-columns: repeat(3, minmax(350px, 1fr));
+    max-width: 1600px;
+  }
+}
+
+/* Add this to your styles.css file */
+.vmi-wizard-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(7, 12, 19, 0.85) !important;
+  display: none !important; /* Hidden by default */
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 9999 !important;
+}
+
+.vmi-wizard-overlay.open {
+  display: flex !important;
+}
+
+/* Mobile-specific wizard styling */
+@media (max-width: 600px) {
+  .vmi-wizard-card {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    overflow-y: auto !important;
+  }
+  
+  .vmi-wizard-step {
+    min-height: 60vh;
+  }
+}
+
+/* ADD THIS TO YOUR styles.css FILE - The blue button fixes */
+#btn-add-what-i-own {
+  width: 100%;
+  max-width: 360px;
+  margin: 32px auto;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 999px;
+  background: #2563eb;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+#btn-add-what-i-own:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+#btn-add-what-i-own:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+}
+
+/* Wizard overlay - make sure it's properly hidden by default */
+.vmi-wizard-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 12, 19, 0.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.vmi-wizard-overlay.open {
+  display: flex;
+}
+
+/* Mobile specific wizard fixes */
+@media (max-width: 600px) {
+  #btn-add-what-i-own {
+    max-width: 90%;
+    margin: 24px auto;
+    padding: 18px 20px;
+    font-size: 1rem;
+  }
+  
+  .vmi-wizard-card {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Desktop wizard fixes */
+@media (min-width: 601px) {
+  .vmi-wizard-card {
+    width: 500px;
+    max-height: 700px;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+}
+
+/* ============================================
+   ONBOARDING WIZARD STYLES
+   Add this to the END of your existing styles.css
+   ============================================ */
+
+/* Wizard overlay */
+.vmi-wizard-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 12, 19, 0.95);
+  backdrop-filter: blur(8px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.vmi-wizard-overlay.open {
+  display: flex;
+}
+
+/* Wizard card */
+.vmi-wizard-card {
+  background: linear-gradient(145deg, #0f172a, #1e293b);
+  color: #f9fafb;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 28px 28px;
+  box-sizing: border-box;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Wizard header */
+.vmi-wizard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.vmi-step-indicator {
+  font-size: 14px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vmi-link-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.vmi-link-btn:hover {
+  color: #f9fafb;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.vmi-link-btn#vmi-wizard-close {
+  font-size: 20px;
+  font-weight: 300;
+  padding: 4px 12px;
+}
+
+/* Wizard steps */
+.vmi-wizard-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.vmi-wizard-step h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #f9fafb;
+  line-height: 1.3;
+}
+
+.vmi-step-hint {
+  font-size: 16px;
+  color: #94a3b8;
+  margin: 0 0 32px 0;
+  line-height: 1.5;
+}
+
+/* Button grids */
+.vmi-btn-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.vmi-btn-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+/* Pill buttons */
+.vmi-pill-btn {
+  padding: 18px 20px;
+  border-radius: 16px;
+  border: 2px solid #334155;
+  background: rgba(30, 41, 59, 0.6);
+  color: #e5e7eb;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.vmi-pill-btn:hover {
+  border-color: #4b8dff;
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+}
+
+.vmi-pill-btn.vmi-selected {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+/* Form fields */
+.vmi-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.vmi-field label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f9fafb;
+  margin-bottom: 4px;
+}
+
+.vmi-field input,
+.vmi-field select {
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 16px;
+  border: 2px solid #334155;
+  background: rgba(15, 23, 42, 0.8);
+  color: #f9fafb;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.vmi-field input:focus,
+.vmi-field select:focus {
+  outline: none;
+  border-color: #4b8dff;
+  background: rgba(15, 23, 42, 0.9);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.vmi-field input::placeholder {
+  color: #64748b;
+}
+
+.vmi-field-inline {
+  flex-direction: row;
+  align-items: center;
+}
+
+.vmi-field-prefix {
+  margin-right: 12px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f9fafb;
+  white-space: nowrap;
+}
+
+/* Primary button */
+.vmi-primary-btn {
+  width: 100%;
+  padding: 20px 24px;
+  border-radius: 16px;
+  border: none;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #2563eb, #4b8dff);
+  color: white;
+  transition: all 0.2s ease;
+  margin-top: auto;
+  text-align: center;
+}
+
+.vmi-primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+}
+
+.vmi-primary-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+}
+
+.vmi-primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Summary box */
+.vmi-summary-box {
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 16px;
+  border: 2px solid #334155;
+  padding: 20px;
+  margin-bottom: 24px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #e5e7eb;
+}
+
+.vmi-summary-box strong {
+  color: #f9fafb;
+  font-weight: 600;
+}
+
+/* Hidden utility */
+.vmi-hidden {
+  display: none;
+}
+
+/* Bottom CTA positioning */
+.vmi-cta-bottom {
+  margin-top: auto;
+}
+
+/* Main page button */
+#btn-add-what-i-own.vmi-primary-btn {
+  width: 100%;
+  max-width: 400px;
+  margin: 40px auto 0;
+  padding: 20px 32px;
+  font-size: 18px;
+  font-weight: 700;
+  display: block;
+  background: linear-gradient(135deg, #2563eb, #4b8dff);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+}
+
+#btn-add-what-i-own.vmi-primary-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+}
+
+#btn-add-what-i-own.vmi-primary-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+}
+
+/* ========== MOBILE RESPONSIVE ========== */
+@media (max-width: 600px) {
+  .vmi-wizard-overlay {
+    padding: 0;
+    align-items: flex-start;
+  }
+  
+  .vmi-wizard-card {
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    padding: 20px 20px 28px;
+    overflow-y: auto;
+  }
+  
+  .vmi-wizard-step h2 {
+    font-size: 22px;
+  }
+  
+  .vmi-step-hint {
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+  
+  .vmi-pill-btn {
+    padding: 16px 18px;
+    font-size: 15px;
+  }
+  
+  .vmi-field input,
+  .vmi-field select {
+    padding: 16px 18px;
+    font-size: 15px;
+  }
+  
+  .vmi-primary-btn {
+    padding: 18px 22px;
+    font-size: 17px;
+  }
+  
+  .vmi-btn-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  #btn-add-what-i-own.vmi-primary-btn {
+    max-width: 90%;
+    margin: 32px auto 0;
+    padding: 18px 24px;
+    font-size: 17px;
+  }
+}
+
+/* ========== DESKTOP ENHANCEMENTS ========== */
+@media (min-width: 1024px) {
+  .vmi-wizard-card {
+    max-width: 520px;
+    padding: 32px 36px 36px;
+  }
+  
+  .vmi-wizard-step h2 {
+    font-size: 26px;
+  }
+  
+  .vmi-step-hint {
+    font-size: 17px;
+  }
+}
+
+/* ============================================
+   MOBILE METRIC GAUGE FIXES
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Make gauge containers larger on mobile */
+  .metric-tile {
+    min-height: 280px !important; /* More room for text */
+    padding: 16px 14px 18px !important;
+  }
+  
+  /* Increase font sizes for mobile readability */
+  .metric-title {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+  }
+  
+  .metric-subtitle {
+    font-size: 12px !important;
+    margin-top: 4px !important;
+  }
+  
+  /* Make value bubble more prominent */
+  .metric-value-bubble {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    padding: 10px 20px !important;
+    margin: 12px 0 !important;
+    background: #e5f2ff !important;
+    color: #111827 !important;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.7) !important;
+  }
+  
+  /* Ensure as-of date is visible */
+  .metric-asof {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #9ca3af !important;
+    margin-top: 8px !important;
+    display: block !important;
+  }
+  
+  /* Make thresholds readable on mobile */
+  .metric-thresholds {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    margin-top: 12px !important;
+    display: block !important;
+    color: #cbd5e1 !important;
+  }
+  
+  /* Ensure help button is tappable */
+  .metric-help {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 16px !important;
+  }
+  
+  /* Special fix for Shiller CAPE note text */
+  .metric-note {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    margin-top: 12px !important;
+    padding-top: 8px !important;
+    display: block !important;
+  }
+  
+  /* Make sure gauge SVGs don't shrink text */
+  .metric-gauge svg text {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Specifically for the "0.0" and percentage text in gauges */
+  .metric-gauge text {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    fill: #000000 !important;
+  }
+}
+
+/* Extra-small phones (iPhone SE, etc.) */
+@media (max-width: 375px) {
+  .metric-tile {
+    min-height: 260px !important;
+    padding: 14px 12px 16px !important;
+  }
+  
+  .metric-title {
+    font-size: 14px !important;
+  }
+  
+  .metric-value-bubble {
+    font-size: 15px !important;
+    padding: 8px 16px !important;
+  }
+  
+  /* Force 1 column layout on very small screens */
+  .metric-board {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* For tablets and medium screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .metric-board {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+  
+  .metric-tile {
+    min-height: 270px !important;
+  }
+}
+
+/* Ensure all metric text has sufficient contrast */
+.metric-value-bubble,
+.metric-asof,
+.metric-thresholds,
+.metric-note {
+  color: #111827 !important; /* Dark text for light backgrounds */
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Dark mode adjustment for gauge text */
+@media (prefers-color-scheme: dark) {
+  .metric-value-bubble,
+  .metric-asof,
+  .metric-thresholds,
+  .metric-note {
+    color: #f9fafb !important; /* Light text for dark mode */
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5) !important;
+  }
+}
+
+/* ============================================
+   GAUGE TEXT VISIBILITY FIXES
+   ============================================ */
+
+/* Make ALL gauge tile text dark for visibility */
+.metric-tile,
+.metric-tile *:not(.metric-help) {
+  color: #111827 !important; /* Dark text */
+}
+
+/* Specifically fix the value bubbles */
+.metric-value-bubble {
+  color: #111827 !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  background: #e5f2ff !important; /* Light blue background */
+  padding: 6px 18px !important;
+  border-radius: 999px !important;
+  display: inline-block !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+  border: 2px solid #2563eb !important;
+}
+
+/* Fix as-of dates */
+.metric-asof {
+  color: #374151 !important; /* Medium-dark gray */
+  font-weight: 600 !important;
+  font-size: 12px !important;
+}
+
+/* Fix thresholds text */
+.metric-thresholds {
+  color: #4b5563 !important; /* Dark gray */
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .metric-value-bubble {
+    font-size: 16px !important;
+    padding: 8px 20px !important;
+    margin: 12px 0 !important;
+  }
+  
+  .metric-asof {
+    font-size: 13px !important;
+  }
+  
+  .metric-thresholds {
+    font-size: 12px !important;
+  }
+}
+
+.holding-baseline-badge {
+    background-color: #fff3e6;
+    color: #cc5500;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75em;
+    font-weight: 700;
+    border: 1.5px solid #ff9900;
+    margin-left: 8px;
+    white-space: nowrap;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(255, 153, 0, 0.2);
+}
+
+.holding-baseline-badge:hover {
+    background-color: #ffe6cc;
+    border-color: #e68a00;
+    box-shadow: 0 2px 4px rgba(255, 153, 0, 0.3);
+    text-decoration: underline;
+}
+
+.holding-baseline-badge:active {
+    background-color: #ffd9b3;
+    transform: translateY(1px);
+}
+
+/* Notes in holding cards */
+.notes-row {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.notes-row .label {
+  font-weight: 600;
+  color: #666;
+}
+
+.notes-value {
+  font-size: 0.9em;
+  line-height: 1.4;
+  color: #555;
+  display: block;
+  margin-top: 4px;
+  background: #f9f9f9;
+  padding: 8px;
+  border-radius: 4px;
+  border-left: 3px solid #4a90e2;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Wizard notes textarea */
+#vmi-notes {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1em;
+  resize: vertical;
+  min-height: 80px;
+}
+
+#vmi-notes:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+/* Add My Investment Button */
+
+/* Make the button more prominent and consistent */
+.vmi-primary-btn {
+  background-color: #2e7d32; /* Green for positive action */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px auto;
+  max-width: 280px;
+  width: 100%;
+}
+
+.vmi-primary-btn:hover {
+  background-color: #1b5e20;
+}
+
+.vmi-primary-btn:active {
+  transform: translateY(1px);
+}
+
+/* gauge collapse animation */
+.metric-board--collapsed {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+/* BEGIN - Totals summary */
+
+/* ============================================
+   TOTAL BALANCE CARD - "Alike but different"
+   ============================================ */
+
+.holdings-total-container {
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.holdings-total-card {
+  /* LIGHTER VERSION of #1e293b (your holdings card color) */
+  background: linear-gradient(135deg, #2d3b50 0%, #253147 100%);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 
+    0 6px 18px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle texture overlay for depth */
+.holdings-total-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Thin accent line at top - subtle difference */
+.holdings-total-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    rgba(59, 130, 246, 0.6), 
+    rgba(34, 197, 94, 0.6), 
+    rgba(59, 130, 246, 0.6));
+  border-radius: 0 0 1px 1px;
+}
+
+/* TITLE - Light text for dark background */
+.holdings-total-title {
+  font-size: 13px;
+  color: #cbd5e1; /* Light blue-gray text */
+  margin: 0 0 16px 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  position: relative;
+  z-index: 2;
+}
+
+/* MAIN AMOUNT - White text for high contrast on dark background */
+.holdings-total-main {
+  font-size: 40px;
+  font-weight: 400;
+  margin: 0 0 8px 0;
+  color: #ffffff; /* White text on dark background */
+  line-height: 1.1;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* GAIN/LOSS INDICATOR - Clear but professional colors */
+.holdings-total-gainloss {
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* POSITIVE (Gain) */
+.holdings-total-gainloss.positive {
+  color: #86efac; /* Light green for dark background */
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+/* NEGATIVE (Loss) */
+.holdings-total-gainloss.negative {
+  color: #fca5a5; /* Light red for dark background */
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Trend arrow */
+.trend-arrow {
+  font-size: 16px;
+  margin-right: 4px;
+}
+
+/* META INFO - subtle, supporting details */
+.holdings-total-meta {
+  font-size: 15px;
+  color: #94a3b8; /* Medium-light blue-gray */
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(148, 163, 184, 0.3);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.holdings-total-meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Optional: Add subtle icon before meta items */
+.holdings-total-meta span::before {
+  content: '•';
+  color: #64748b;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .holdings-total-card {
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  .holdings-total-main {
+    font-size: 32px;
+  }
+  
+  .holdings-total-gainloss {
+    font-size: 16px;
+    padding: 6px 12px;
+  }
+  
+  .holdings-total-meta {
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+  }
+  
+  .holdings-total-meta span::before {
+    display: none;
+  }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+  .holdings-total-main {
+    font-size: 28px;
+  }
+  
+  .holdings-total-title {
+    font-size: 12px;
+  }
+}
+
+/* END - Totals summary */
+
+/* BEGIN - Modal container stuff for the larger, editable holding tile */
+
+.holding-detail-modal {
+  /* Overlay backdrop */
+  position: fixed;
+  inset: 0; /* top:0, right:0, bottom:0, left:0 */
+  background-color: rgba(7, 12, 19, 0.92); /* Dark blue-black with 92% opacity */
+  backdrop-filter: blur(8px); /* Frosted glass effect */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.holding-detail-modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Modal card */
+.holding-detail-card {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  width: 100%;
+  max-width: 500px; /* Desktop max */
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  position: relative;
+}
+
+/* === HEADER === */
+
+.holding-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.holding-detail-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f9fafb;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.holding-detail-subtitle {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+/* Hamburger menu (non-functional for now) */
+.holding-detail-menu {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #cbd5e1;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.holding-detail-menu:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+/* === CHART PLACEHOLDER AREA === */
+
+.holding-chart-placeholder {
+  padding: 24px;
+  text-align: center;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.chart-svg-container {
+  width: 100%;
+  height: 180px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* S&P 500 SVG styling */
+.chart-svg {
+  width: 100%;
+  height: 100%;
+  max-width: 300px;
+}
+
+.chart-placeholder-text {
+  font-size: 15px;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.chart-placeholder-note {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.holding-detail-total {
+  font-size: 28px;
+  font-weight: 800;
+  color: #f9fafb;
+  margin-top: 4px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+}
+
+/* === HOLDINGS DETAILS SECTION ==== */
+
+.holding-details {
+  padding: 24px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-size: 15px;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.detail-value {
+  font-size: 16px;
+  color: #f9fafb;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Gain/Loss specific styling */
+.detail-value.gain-positive {
+  color: #86efac;
+}
+
+.detail-value.gain-negative {
+  color: #fca5a5;
+}
+
+/* Notes row specific */
+.detail-row.notes-row {
+  align-items: flex-start;
+}
+
+.notes-content {
+  font-size: 14px;
+  color: #e5e7eb;
+  line-height: 1.5;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 3px solid #4b8dff;
+  margin-top: 8px;
+  width: 100%;
+}
+
+/* === CLOSE BUTTON --- */
+
+.holding-detail-close {
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(to top, #1e293b, rgba(30, 41, 59, 0.9));
+  padding: 20px 24px;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  text-align: center;
+  margin-top: auto;
+}
+
+.close-button {
+  width: 100%;
+  padding: 16px 24px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.close-button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+.close-button:active {
+  transform: translateY(0);
+}
+
+/* === MOBILE RESPONSIVE ADAPTATIONS === */
+
+/* Mobile (≤ 768px) */
+@media (max-width: 768px) {
+  .holding-detail-modal {
+    padding: 12px;
+    align-items: flex-end; /* Slightly bottom-aligned for mobile */
+  }
+  
+  .holding-detail-card {
+    max-height: 90vh;
+    border-radius: 20px 20px 0 0; /* Rounded top only on mobile */
+  }
+  
+  .holding-detail-header {
+    padding: 16px 20px 12px;
+  }
+  
+  .holding-detail-title {
+    font-size: 18px;
+  }
+  
+  .chart-svg-container {
+    height: 150px;
+  }
+  
+  .holding-chart-placeholder,
+  .holding-details {
+    padding: 20px;
+  }
+  
+  .detail-row {
+    padding: 10px 0;
+  }
+}
+
+/* Small mobile (≤ 480px) */
+@media (max-width: 480px) {
+  .holding-detail-card {
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .holding-detail-header {
+    padding: 14px 16px 10px;
+  }
+  
+  .holding-chart-placeholder,
+  .holding-details {
+    padding: 16px;
+  }
+  
+  .chart-svg-container {
+    height: 130px;
+  }
+}
+
+/* Desktop (≥ 1024px) */
+@media (min-width: 1024px) {
+  .holding-detail-card {
+    max-width: 520px;
+  }
+}
+
+/* === ANIMATIONS === */
+
+/* Entrance animation */
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.holding-detail-card {
+  animation: modalSlideUp 0.3s ease-out;
+}
+
+/* Mobile-specific entrance (from bottom) */
+@media (max-width: 768px) {
+  @keyframes mobileModalSlideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  .holding-detail-card {
+    animation: mobileModalSlideUp 0.3s ease-out;
+  }
+}
+
+/* Menu Wrapper for positioning */
+.holding-menu-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+
+/* END - Modal container stuff for the larger, editable holding tile */
+
+/* BEGIN hamburger menu stuff */
+
+/* ========== HAMBURGER MENU STYLES ========== */
+
+/* Menu Wrapper */
+.holding-menu-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Menu Dropdown - HIDDEN by default */
+.holding-menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: #1e293b;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 12px;
+  padding: 8px 0;
+  min-width: 220px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+  display: none; /* HIDDEN */
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Menu when shown */
+.holding-menu-dropdown.show {
+  display: block; /* VISIBLE */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Menu Group Titles */
+.menu-group-title {
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 16px 4px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.menu-group-title:first-child {
+  margin-top: 0;
+}
+
+/* Menu Items */
+.menu-item {
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.1s ease;
+}
+
+.menu-item:hover:not(.coming-soon) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.menu-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Coming Soon Items */
+.menu-item.coming-soon {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.menu-item.coming-soon:hover {
+  background: none;
+}
+
+.coming-soon-badge {
+  font-size: 10px;
+  background: #4b5563;
+  color: #9ca3af;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: auto;
+  font-weight: 500;
+}
+
+/* Divider */
+.menu-divider {
+  height: 1px;
+  background: rgba(148, 163, 184, 0.2);
+  margin: 8px 0;
+}
+
+/* END hamburger menu stuff */
+
+/* ... Rest of your existing CSS remains ... */
