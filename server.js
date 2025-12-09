@@ -1,9 +1,10 @@
+//server.js
 const express = require('express');
 const path = require('path');
 const mysql = require('mysql2/promise');
 
 // --- EODHD config for /api/prices ---
-const EODHD_API_TOKEN = '**********************';
+const EODHD_API_TOKEN = '*************************';
 const EODHD_BASE_URL = 'https://eodhd.com/api/real-time';
 
 const app = express();
@@ -11,8 +12,8 @@ const PORT = process.env.PORT || 3000;
 
 // --- DATABASE CONFIGURATION ---
 const dbConfig = {
-    user: '*************',
-    password: '*****************', 
+    user: '*************************',
+    password: '*************************', 
     socketPath: '/var/run/mysqld/mysqld.sock',
     database: 'vmi_primary'
 };
