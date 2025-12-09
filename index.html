@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Market Metrics Dashboard</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="app-root">
+						 <header class="app-header">
+			  <div class="app-header-left">
+				<img src="/img/vmi-logo-cropped.png"
+					 alt="View My Investments Logo"
+					 class="app-logo">
+
+				<h1 class="app-title desktop-title">ViewMyInvestments.com</h1>
+			  </div>
+
+			  <nav class="app-nav">
+				<a href="/index.html" class="nav-link nav-link-active">Dashboard</a>
+				<a href="/ledger.html" class="nav-link">Transactions</a>
+			  </nav>
+			</header>
+
+
+
+<!-- metric/gauge tiles section -->
+		<section class="market-section">
+		  <div class="market-section-header">
+			<h2 class="market-section-title">Market Conditions</h2>
+			<button type="button" id="market-toggle" class="market-toggle">
+			  Hide
+			</button>
+		  </div>
+
+		  <div id="metric-board-container">
+			<div id="metric-board" class="metric-board">
+			  <!-- Tiles are injected here by tiles.js -->
+			</div>
+		  </div>
+		</section>
+<!-- end of metric/gauge tiles section -->
+
+<!-- Holdings summary section -->
+<div id="holdings-summary-grid" class="holdings-summary-grid">
+  <!-- Cards will be injected here by holdings-summary.js -->
+</div>
+
+<!-- To: -->
+<button id="btn-add-what-i-own" class="vmi-primary-btn">
+  + Add My Investment
+</button>
+
+<!-- Wizard HTML structure - ONLY ONE OF THESE! -->
+<div id="vmi-onboarding-wizard" class="vmi-wizard-overlay" style="display: none;">
+  <div class="vmi-wizard-card" role="dialog" aria-modal="true">
+    <!-- Top bar: back + step indicator + close -->
+    <div class="vmi-wizard-header">
+      <button id="vmi-wizard-back" class="vmi-link-btn" aria-label="Back">
+        ← Back
+      </button>
+      <span id="vmi-wizard-step-indicator" class="vmi-step-indicator">
+        Step 1 of 7
+      </span>
+      <button id="vmi-wizard-close" class="vmi-link-btn" aria-label="Close">
+        ✕
+      </button>
+    </div>
+    
+    <!-- Step 1: Account Type -->
+    <div class="vmi-wizard-step" data-step="1">
+      <h2>What type of account is this?</h2>
+      <p class="vmi-step-hint">Select the closest match.</p>
+      
+      <div class="vmi-btn-grid">
+        <button class="vmi-pill-btn" data-account="401k/403b">401k/403b</button>
+        <button class="vmi-pill-btn" data-account="Roth IRA">Roth IRA</button>
+        <button class="vmi-pill-btn" data-account="Traditional IRA">Traditional IRA</button>
+        <button class="vmi-pill-btn" data-account="Brokerage">Brokerage</button>
+        <button class="vmi-pill-btn" data-account="Other">Other</button>
+      </div>
+      
+      <!-- Other account name input -->
+      <div id="vmi-account-other-wrapper" class="vmi-field vmi-hidden">
+        <label for="vmi-account-other-name">Name this account:</label>
+        <input type="text" id="vmi-account-other-name" placeholder="e.g., Vanguard 401k">
+      </div>
+      
+      <button id="vmi-step1-next" class="vmi-primary-btn vmi-cta-bottom">Next</button>
+    </div>
+    
+    <!-- Step 2: Account Value -->
+    <div class="vmi-wizard-step vmi-hidden" data-step="2">
+      <h2>What's the total value of this account?</h2>
+      <p class="vmi-step-hint">Enter the current balance.</p>
+      
+      <div class="vmi-field vmi-field-inline">
+        <span class="vmi-field-prefix">$</span>
+        <input type="number" id="vmi-account-value" placeholder="0.00" step="0.01" min="0">
+      </div>
+      
+      <button id="vmi-step2-next" class="vmi-primary-btn vmi-cta-bottom">Next</button>
+    </div>
+    
+    <!-- Step 3: Know Investment? -->
+    <div class="vmi-wizard-step vmi-hidden" data-step="3">
+      <h2>Do you know what this account is invested in?</h2>
+      <p class="vmi-step-hint">e.g., S&P 500 fund (SPY), Vanguard Total Market (VTI), etc.</p>
+      
+      <div class="vmi-btn-vertical">
+        <button class="vmi-pill-btn" data-know-investment="yes">Yes, I know</button>
+        <button class="vmi-pill-btn" data-know-investment="no">Not yet / I'll add later</button>
+      </div>
+      
+      <button id="vmi-step3-next" class="vmi-primary-btn vmi-cta-bottom">Next</button>
+    </div>
+    
+    <!-- Step 4: Ticker -->
+    <div class="vmi-wizard-step vmi-hidden" data-step="4">
+      <h2>What is it invested in?</h2>
+      <p class="vmi-step-hint">Enter the fund or stock symbol.</p>
+      
+      <div class="vmi-field">
+        <label for="vmi-ticker">Symbol (ticker)</label>
+        <input type="text" id="vmi-ticker" placeholder="e.g., SPY, VTI, AAPL" maxlength="10">
+      </div>
+      
+      <button id="vmi-step4-next" class="vmi-primary-btn vmi-cta-bottom">Next</button>
+    </div>
+    
+    <!-- Step 5: Know Shares? -->
+    <div class="vmi-wizard-step vmi-hidden" data-step="5">
+      <h2>Do you know how many shares you own?</h2>
+      <p class="vmi-step-hint">If not, we'll calculate it from the value.</p>
+      
+      <div class="vmi-btn-vertical">
+        <button class="vmi-pill-btn" data-know-shares="yes">Yes, I know</button>
+        <button class="vmi-pill-btn" data-know-shares="no">Calculate for me</button>
+      </div>
+      
+      <!-- Shares input (shown only if "Yes") -->
+      <div id="vmi-shares-wrapper" class="vmi-field vmi-hidden">
+        <label for="vmi-shares">Number of shares</label>
+        <input type="number" id="vmi-shares" placeholder="0.0000" step="0.0001" min="0">
+      </div>
+      
+      <button id="vmi-step5-next" class="vmi-primary-btn vmi-cta-bottom">Next</button>
+    </div>
+    
+    <!-- Step 6: Contributions -->
+    <div class="vmi-wizard-step vmi-hidden" data-step="6">
+      <h2>Do you make regular contributions?</h2>
+      <p class="vmi-step-hint">e.g., $500 from each paycheck.</p>
+      
+      <div class="vmi-btn-vertical">
+        <button class="vmi-pill-btn" data-contrib="yes">Yes, add them now</button>
+        <button class="vmi-pill-btn" data-contrib="no">No contributions</button>
+        <button class="vmi-pill-btn" data-contrib="later">I'll add them later</button>
+      </div>
+      
+      <!-- Contribution details (shown only if "Yes") -->
+      <div id="vmi-contrib-details" class="vmi-hidden">
+        <div class="vmi-field">
+          <label for="vmi-contrib-amount">Amount per contribution</label>
+          <div class="vmi-field-inline">
+            <span class="vmi-field-prefix">$</span>
+            <input type="number" id="vmi-contrib-amount" placeholder="0.00" step="0.01" min="0">
+          </div>
+        </div>
+        
+        <div class="vmi-field">
+          <label for="vmi-contrib-frequency">How often?</label>
+          <select id="vmi-contrib-frequency">
+            <option value="">Select frequency</option>
+            <option value="biweekly">Every two weeks</option>
+            <option value="semimonthly">Twice per month</option>
+            <option value="monthly">Monthly</option>
+            <option value="weekly">Weekly</option>
+          </select>
+        </div>
+      </div>
+      
+      <button id="vmi-step6-next" class="vmi-primary-btn vmi-cta-bottom">Next</button>
+    </div>
+ 
+			  <!-- Step 7: Notes (NEW) - Moved to step 7, Summary becomes step 8 -->
+		<div class="vmi-wizard-step vmi-hidden" data-step="7">
+		  <h2>Add Notes (Optional)</h2>
+		  <p class="vmi-step-hint">Would you like to add notes about this investment?</p>
+
+		  <div class="vmi-btn-vertical">
+			<button class="vmi-pill-btn" data-notes="yes">Yes, add notes</button>
+			<button class="vmi-pill-btn" data-notes="no">No, skip notes</button>
+		  </div>
+
+		  <!-- Notes textarea (shown only if "Yes") -->
+		  <div id="vmi-notes-wrapper" class="vmi-field vmi-hidden">
+			<label for="vmi-notes">Notes about this investment:</label>
+			<textarea 
+			  id="vmi-notes" 
+			  rows="4" 
+			  placeholder="Add any notes like: 'Long-term growth fund', 'Dividend focused', 'Retirement account', etc."
+			></textarea>
+		  </div>
+
+		  <button id="vmi-step7-next" class="vmi-primary-btn vmi-cta-bottom">Next</button>
+		</div>
+
+		<!-- Step 8: Summary (renumbered from 7 to 8) -->
+		<div class="vmi-wizard-step vmi-hidden" data-step="8">
+		  <h2>Review & Save</h2>
+		  <p class="vmi-step-hint">Confirm everything looks right.</p>
+
+		  <div id="vmi-summary" class="vmi-summary-box">
+			<!-- Summary will be injected here -->
+		  </div>
+
+		  <button id="vmi-finish" class="vmi-primary-btn vmi-cta-bottom">Finish & Save</button>
+		</div>
+  </div>
+</div>
+	  
+<!-- Metric detail overlay (hidden by default) -->
+		<div id="metric-detail-overlay" class="metric-detail-overlay" aria-hidden="true">
+		  <div class="metric-detail-backdrop"></div>
+		  <div class="metric-detail-panel" role="dialog" aria-modal="true">
+			<button type="button" id="metric-detail-close" class="metric-detail-close" aria-label="Close">
+			  ×
+			</button>
+			<div id="metric-detail-content" class="metric-detail-content">
+			  <!-- Clicked tile content will be cloned here -->
+			</div>
+		  </div>
+		</div>
+
+	
+		<script>
+		  document.addEventListener("DOMContentLoaded", function () {
+			  const toggleBtn = document.getElementById("market-toggle");
+			  const boardContainer = document.getElementById("metric-board-container");
+
+			  if (!toggleBtn || !boardContainer) return;
+
+			  // START WITH IT COLLAPSED (HIDDEN)
+			  let collapsed = true; // Changed from false to true
+
+			  // Apply collapsed state on load
+			  boardContainer.classList.toggle("metric-board--collapsed", collapsed);
+			  toggleBtn.textContent = collapsed ? "Show" : "Hide";
+
+			  toggleBtn.addEventListener("click", function () {
+				collapsed = !collapsed;
+				boardContainer.classList.toggle("metric-board--collapsed", collapsed);
+				toggleBtn.textContent = collapsed ? "Show" : "Hide";
+			  });
+			});
+		</script>
+	
+					<script>
+					  document.addEventListener("DOMContentLoaded", function () {
+						const overlay = document.getElementById("metric-detail-overlay");
+						const overlayContent = document.getElementById("metric-detail-content");
+						const closeBtn = document.getElementById("metric-detail-close");
+						const backdrop = overlay ? overlay.querySelector(".metric-detail-backdrop") : null;
+
+						if (!overlay || !overlayContent) return;
+
+						function openMetricDetail(tile) {
+						  if (!tile) return;
+
+						  const clone = tile.cloneNode(true);
+						  overlayContent.innerHTML = "";
+						  overlayContent.appendChild(clone);
+
+						  overlay.classList.add("is-open");
+						  overlay.setAttribute("aria-hidden", "false");
+						}
+
+						function closeMetricDetail() {
+						  overlay.classList.remove("is-open");
+						  overlay.setAttribute("aria-hidden", "true");
+						  overlayContent.innerHTML = "";
+						}
+
+						// 🔹 Click on metric-tile → open detail (except when editing Shiller)
+						document.addEventListener("click", function (event) {
+						  // 1) If user is interacting with Shiller inline editor, do nothing.
+						  const shillerInteractive = event.target.closest(
+							".shiller-edit-container, .shiller-input, .shiller-confirm, .metric-value-bubble[data-metric-key='shiller']"
+						  );
+						  if (shillerInteractive) return;
+
+						  const tile = event.target.closest(".metric-tile");
+						  if (!tile) return;
+
+						  // 2) Ignore clicks on the little "?" help button
+						  const helpBtn = event.target.closest(".metric-help");
+						  if (helpBtn) return;
+
+						  openMetricDetail(tile);
+						});
+
+						// Close via X or clicking backdrop
+						if (closeBtn) {
+						  closeBtn.addEventListener("click", closeMetricDetail);
+						}
+						if (backdrop) {
+						  backdrop.addEventListener("click", closeMetricDetail);
+						}
+
+						// Esc key to close
+						document.addEventListener("keydown", function (event) {
+						  if (event.key === "Escape" && overlay.classList.contains("is-open")) {
+							closeMetricDetail();
+						  }
+						});
+					  });
+					</script>
+
+	  
+</script>	  
+	  
+	    <script src="/js/holdings-summary.js"></script>
+		<script src="/js/gauge.js"></script>
+		<script src="/js/tiles.js"></script>
+		<script src="/js/holdings.js"></script>
+	    <script src="/js/onboarding.js"></script>
+		<script src="/js/holding-detail.js"></script>
+	
+
+<div class="chart-svg-container">
+  <svg class="chart-svg" viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
+    <!-- Grid lines -->
+    <line x1="0" y1="30" x2="400" y2="30" stroke="#334155" stroke-width="1" stroke-dasharray="4" />
+    <line x1="0" y1="75" x2="400" y2="75" stroke="#334155" stroke-width="1" stroke-dasharray="4" />
+    <line x1="0" y1="120" x2="400" y2="120" stroke="#334155" stroke-width="1" stroke-dasharray="4" />
+    
+    <!-- S&P 500-like line -->
+    <path d="M0,100 L40,90 L80,110 L120,85 L160,105 L200,70 L240,95 L280,80 L320,110 L360,95 L400,105" 
+          fill="none" 
+          stroke="#4b8dff" 
+          stroke-width="3" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" />
+    
+    <!-- Area under line -->
+    <path d="M0,100 L40,90 L80,110 L120,85 L160,105 L200,70 L240,95 L280,80 L320,110 L360,95 L400,105 L400,150 L0,150 Z" 
+          fill="rgba(75, 141, 255, 0.1)" />
+    
+    <!-- Current price indicator -->
+    <circle cx="400" cy="105" r="6" fill="#4b8dff" />
+    <circle cx="400" cy="105" r="8" fill="rgba(75, 141, 255, 0.3)" />
+  </svg>
+</div>	
+
+<!-- ========== HOLDING DETAIL MODAL ========== -->
+<div id="holding-detail-modal" class="holding-detail-modal">
+  <div class="holding-detail-card">
+    
+    <!-- Header -->
+    <div class="holding-detail-header">
+      <div>
+        <h2 class="holding-detail-title" id="modal-symbol">-</h2>
+        <div class="holding-detail-subtitle" id="modal-account">-</div>
+        <div class="holding-detail-total" id="modal-total-value">-</div>
+      </div>
+      
+      <div class="holding-menu-wrapper">
+        <button class="holding-detail-menu" aria-label="More actions" id="holding-menu-btn">≡</button>
+        
+        <div class="holding-menu-dropdown" id="holding-menu-dropdown">
+          <!-- Investment Actions Group -->
+          <div class="menu-group-title">📈 Investment Actions</div>
+          
+          <button class="menu-item coming-soon" data-action="add-shares" disabled>
+            <span class="menu-icon">➕</span>
+            Add Shares
+            <span class="coming-soon-badge">Soon</span>
+          </button>
+          
+          <button class="menu-item coming-soon" data-action="remove-shares" disabled>
+            <span class="menu-icon">➖</span>
+            Remove Shares
+            <span class="coming-soon-badge">Soon</span>
+          </button>
+          
+          <button class="menu-item coming-soon" data-action="add-dividend" disabled>
+            <span class="menu-icon">💰</span>
+            Add Dividend
+            <span class="coming-soon-badge">Soon</span>
+          </button>
+          
+          <button class="menu-item" data-action="see-transactions">
+            <span class="menu-icon">📊</span>
+            See Transactions
+          </button>
+          
+          <div class="menu-divider"></div>
+          
+          <!-- Account Settings Group -->
+          <div class="menu-group-title">⚙️ Account Settings</div>
+          
+          <button class="menu-item coming-soon" data-action="edit-account-type" disabled>
+            <span class="menu-icon">🏦</span>
+            Edit Account Type
+            <span class="coming-soon-badge">Soon</span>
+          </button>
+          
+          <button class="menu-item" data-action="edit-notes">
+            <span class="menu-icon">📝</span>
+            Edit Notes
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Chart Placeholder -->
+    <div class="holding-chart-placeholder">
+      <div class="chart-svg-container">
+        <svg class="chart-svg" viewBox="0 0 400 150" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="30" x2="400" y2="30" stroke="#334155" stroke-width="1" stroke-dasharray="4" />
+          <line x1="0" y1="75" x2="400" y2="75" stroke="#334155" stroke-width="1" stroke-dasharray="4" />
+          <line x1="0" y1="120" x2="400" y2="120" stroke="#334155" stroke-width="1" stroke-dasharray="4" />
+          <path d="M0,100 L40,90 L80,110 L120,85 L160,105 L200,70 L240,95 L280,80 L320,110 L360,95 L400,105" 
+                fill="none" stroke="#4b8dff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M0,100 L40,90 L80,110 L120,85 L160,105 L200,70 L240,95 L280,80 L320,110 L360,95 L400,105 L400,150 L0,150 Z" 
+                fill="rgba(75, 141, 255, 0.1)" />
+          <circle cx="400" cy="105" r="6" fill="#4b8dff" />
+          <circle cx="400" cy="105" r="8" fill="rgba(75, 141, 255, 0.3)" />
+        </svg>
+      </div>
+      <p class="chart-placeholder-text">Your personalized performance charts arrive soon!</p>
+      <p class="chart-placeholder-note">Interactive charts with your actual data coming in the next update</p>
+    </div>
+    
+    <!-- Details - ALL DYNAMIC NOW -->
+    <div class="holding-details">
+      <div class="detail-row">
+        <span class="detail-label">Shares</span>
+        <span class="detail-value" id="modal-shares">-</span>
+      </div>
+      
+      <div class="detail-row">
+        <span class="detail-label">Cost Basis</span>
+        <span class="detail-value" id="modal-cost-basis">-</span>
+      </div>
+      
+      <div class="detail-row">
+        <span class="detail-label">Current Price</span>
+        <span class="detail-value" id="modal-current-price">-</span>
+      </div>
+      
+      <div class="detail-row">
+        <span class="detail-label">Gain/Loss</span>
+        <span class="detail-value" id="modal-gain">-</span>
+      </div>
+      
+      <div class="detail-row notes-row">
+        <div style="width: 100%;">
+          <div class="detail-label">Notes</div>
+          <div class="notes-content" id="modal-notes">-</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Close Button -->
+    <div class="holding-detail-close">
+      <button class="close-button">Close</button>
+    </div>
+    
+  </div>
+</div>
+<!-- ========== END MODAL ========== -->
+	
+</body>
+</html>
